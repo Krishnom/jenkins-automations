@@ -1,0 +1,14 @@
+echo jobNames.join('\n')
+
+//TODO Uncomment to actually build the jobs.
+// jobNames.each {
+//     build job: it, wait: false
+// }
+
+@NonCPS
+def getJobNames() {
+  def project = Jenkins.instance.getItemByFullName(currentBuild.fullProjectName)
+  project.parent.items.findAll {
+      it.fullName != project.fullName && it instanceof hudson.model.Job
+  }.collect { it.fullName }
+}
